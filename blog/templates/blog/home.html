@@ -1,0 +1,10 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+    {% for post in posts.all %}
+        <div>
+            <h2><a href = "{% url 'detail' post.id %}">{{post.restaurant_name}}</a></h2>
+            <p>{{post.created_date}}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

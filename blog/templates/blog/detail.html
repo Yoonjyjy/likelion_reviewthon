@@ -1,0 +1,36 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    <div style="margin-top:30px;margin-bottom:30px;">
+        <h2>{{post.restaurant_name}}</h2>
+        <p>{{post.created_date}}</p>
+        <p>{{post.text}}</p>
+        <a href = "{% url 'edit' post.id %}" class="btn btn-outline-primary">edit</a>
+        <a href = "{% url 'delete' post.id %}" class="btn btn-outline-primary">delete</a>
+    </div>    
+
+    <hr>
+
+    <p>평가 {{ post.comments.count }}개</p>
+    <div class="form-group">
+        <h4>음식점을 평가해주세요!</h4>
+        <p></p>
+        <form method="POST" action="{% url 'add_comment' post.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-warning" style="margin-left:290px;">add</button>
+        </form>
+    </div>
+
+    {% for comment in post.comments.all %}
+    <div>
+        <p>-----------</p>
+        <div>{{comment.created_date}}</div>
+        <strong>{{comment.nickname}}</strong>
+        <p>★ : {{comment.score}}점</p>
+        {{comment.text|linebreaks}}
+        <a href="{% url 'comment_delete' comment_id=comment.id %}" onclick="return confirm('정말로 삭제하시겠습니까?')" class="btn btn-warning">delete comment</a>
+    </div>
+    {% empty %}
+    <p>댓글 없음</p>
+    {% endfor %}
+{% endblock %}
